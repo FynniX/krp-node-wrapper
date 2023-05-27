@@ -1,0 +1,43 @@
+import {EventT} from "./EventT";
+import {EntryT} from "./EntryT";
+import {EntryRemoveT} from "./EntryRemoveT";
+import {SessionT} from "./SessionT";
+import {SessionStatusT} from "./SessionStatusT";
+import {WeatherT} from "./WeatherT";
+import {SessionEntryT} from "./SessionEntryT";
+import {DriverStatusT} from "./DriverStatusT";
+import {BestLapT} from "./BestLapT";
+import {LastLapT} from "./LastLapT";
+import {PenaltyT} from "./PenaltyT";
+import {LapT} from "./LapT";
+import {SplitT} from "./SplitT";
+import {SpeedT} from "./SpeedT";
+import {ClassificationT} from "./ClassificationT";
+import {ChallengeDataT} from "./ChallengeDataT";
+import {TrackDataT} from "./TrackDataT";
+import {TrackSegmentT} from "./TrackSegmentT";
+import {TrackPositionT} from "./TrackPositionT";
+import {ContactT} from "./ContactT";
+
+export type UpdateT = {
+  Events: EventT[];
+  Entries: EntryT[];
+  EntryRemovalsT: EntryRemoveT[];
+  Sessions: SessionT[];
+  SessionStatus: SessionStatusT[];
+  Weathers: WeatherT[];
+  SessionEntries: SessionEntryT[];
+  DriverStatus: DriverStatusT[];
+  BestLaps: BestLapT[];
+  LastLaps: LastLapT[];
+  Penalties: PenaltyT[];
+  Laps: LapT[];
+  Splits: SplitT[];
+  Speeds: SpeedT[];
+  Classifications: ClassificationT[];
+  ChallengeData: ChallengeDataT[];
+  TrackData: TrackDataT[];
+  TrackSegments: TrackSegmentT[];
+  TrackPositions: TrackPositionT[];
+  Contacts: ContactT[];
+}

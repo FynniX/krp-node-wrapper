@@ -1,0 +1,16 @@
+{
+  "name": "krp-node-wrapper",
+  "version": "1.0.0",
+  "description": "Node.js Wrapper to communicate with Kart Racing Pro Server",
+  "main": "src/index.ts",
+  "private": true,
+  "scripts": {},
+  "keywords": [],
+  "author": "Fynn Haupt",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.2.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
