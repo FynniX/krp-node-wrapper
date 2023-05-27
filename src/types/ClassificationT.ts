@@ -20,6 +20,6 @@ export type ClassificationEntryT = {
   kartStatus?: ClassificationEntryKartStatusT;
 }
 
-export type ClassificationEntryStatusT = "DNS" | "DSQ" | string | undefined;
+export type ClassificationEntryStatusT = "DNS" | "DSQ" | undefined;
 
 export type ClassificationEntryKartStatusT = "TRK" | "PIT";

@@ -3,27 +3,6 @@ import BinaryWriter from "./classes/BinaryWriter";
 import BinaryReader from "./classes/BinaryReader";
 import {getParts} from "./functions/getParts";
 import {toTyped} from "./functions/toTyped";
-import {UpdateT} from "./types/UpdateT";
-import {EventT} from "./types/EventT";
-import {ClassificationT} from "./types/ClassificationT";
-import {TrackPositionT} from "./types/TrackPositionT";
-import {EntryT} from "./types/EntryT";
-import {EntryRemoveT} from "./types/EntryRemoveT";
-import {SessionT} from "./types/SessionT";
-import {SessionStatusT} from "./types/SessionStatusT";
-import {WeatherT} from "./types/WeatherT";
-import {SessionEntryT} from "./types/SessionEntryT";
-import {DriverStatusT} from "./types/DriverStatusT";
-import {BestLapT} from "./types/BestLapT";
-import {LastLapT} from "./types/LastLapT";
-import {PenaltyT} from "./types/PenaltyT";
-import {LapT} from "./types/LapT";
-import {SplitT} from "./types/SplitT";
-import {SpeedT} from "./types/SpeedT";
-import {ChallengeDataT} from "./types/ChallengeDataT";
-import {TrackDataT} from "./types/TrackDataT";
-import {TrackSegmentT} from "./types/TrackSegmentT";
-import {ContactT} from "./types/ContactT";
 import EventEmitter from "events";
 
 class KRPNodeWrapper extends EventEmitter {
@@ -35,28 +14,6 @@ class KRPNodeWrapper extends EventEmitter {
   private lastMessage: bigint = BigInt(-1);
   private stop: () => void = () => {};
   private readonly console: (msg: any) => void;
-  private update: UpdateT = {
-    Events: [],
-    Entries: [],
-    EntryRemovalsT: [],
-    Sessions: [],
-    SessionStatus: [],
-    Weathers: [],
-    SessionEntries: [],
-    DriverStatus: [],
-    BestLaps: [],
-    LastLaps: [],
-    Penalties: [],
-    Laps: [],
-    Splits: [],
-    Speeds: [],
-    Classifications: [],
-    ChallengeData: [],
-    TrackData: [],
-    TrackSegments: [],
-    TrackPositions: [],
-    Contacts: []
-  }
 
   constructor(hostname: string, port: number, password: string, logging: boolean) {
     super();
@@ -83,8 +40,8 @@ class KRPNodeWrapper extends EventEmitter {
     this.lastMessage = process.hrtime.bigint();
     const reader = new BinaryReader(message, undefined, 'LE');
     const szString = reader.readStringLine();
-
     const szData = [];
+
     switch (szString) {
       case "OK":
         this.connected = true;
@@ -108,79 +65,8 @@ class KRPNodeWrapper extends EventEmitter {
         const szId = reader.readStringLine();
         while (reader.size > 0)
           szData.push(reader.readStringLine());
-        
-        const parts = getParts(szData);
 
-        for (const part of parts) {
-          const data = toTyped(part);
-          
-          switch (part[0].toUpperCase()) {
-            case "EVENT":
-              this.update.Events.push(<EventT>data);
-              break;
-            case "ENTRY":
-              this.update.Entries.push(<EntryT>data);
-              break;
-            case "ENTRYREMOVE":
-              this.update.EntryRemovalsT.push(<EntryRemoveT>data);
-              break;
-            case "SESSION":
-              this.update.Sessions.push(<SessionT>data);
-              break;
-            case "SESSIONSTATUS":
-              this.update.SessionStatus.push(<SessionStatusT>data);
-              break;
-            case "WEATHER":
-              this.update.Weathers.push(<WeatherT>data);
-              break;
-            case "SESSIONENTRY":
-              this.update.SessionEntries.push(<SessionEntryT>data);
-              break;
-            case "DRIVERSTATUS":
-              this.update.DriverStatus.push(<DriverStatusT>data);
-              break;
-            case "BESTLAP":
-              this.update.BestLaps.push(<BestLapT>data);
-              break;
-            case "LASTLAP":
-              this.update.LastLaps.push(<LastLapT>data);
-              break;
-            case "PENALTY":
-              this.update.Penalties.push(<PenaltyT>data);
-              break;
-            case "LAP":
-              this.update.Laps.push(<LapT>data);
-              break;
-            case "SPLIT":
-              this.update.Splits.push(<SplitT>data);
-              break;
-            case "SPEED":
-              this.update.Speeds.push(<SpeedT>data);
-              break;
-            case "CLASSIFICATION":
-              this.update.Classifications.push(<ClassificationT>data);
-              break;
-            case "CHALLENGEDATA":
-              this.update.ChallengeData.push(<ChallengeDataT>data);
-              break;
-            case "TRACKDATA":
-              this.update.TrackData.push(<TrackDataT>data);
-              break;
-            case "TRACKSEGMENT":
-              this.update.TrackSegments.push(<TrackSegmentT>data);
-              break;
-            case "TRACKPOSITION":
-              this.update.TrackPositions.push(<TrackPositionT>data);
-              break;
-            case "CONTACT":
-              this.update.Contacts.push(<ContactT>data);
-              break;
-            default:
-              this.console("Unknown Event: " + part[0].toUpperCase())
-          }
-        }
-
-        this.emit('update', this.update);
+        this.handleParts(getParts(szData));
 
         const writer = new BinaryWriter('LE');
         writer.writeStringLine("ACK");
@@ -193,11 +79,27 @@ class KRPNodeWrapper extends EventEmitter {
         while (reader.size > 0)
           szData.push(reader.readStringLine());
 
-        this.console(`Data Type: ${szData[0]}!`);
+        const type = szData[0];
+        this.handleParts(getParts(szData));
+
+        this.console(`Data Type: ${type}!`);
         break;
       case "ALIVE":
         this.console("Alive!");
         break;
+    }
+  }
+
+  handleParts(parts: string[][]): void {
+    for (const part of parts) {
+      const data = toTyped(part);
+
+      if(!data) {
+        this.console("Unknown Event: " + part[0].toUpperCase());
+        continue;
+      }
+
+      this.emit('update', part[0].toUpperCase(), data);
     }
   }
 
@@ -250,7 +152,8 @@ class KRPNodeWrapper extends EventEmitter {
     const writer = new BinaryWriter('LE');
     writer.writeStringLine("START");
     writer.writeStringLine("1");
-    writer.writeStringLine("1");
+    writer.writeStringLine("2");
+
     this.client.send(writer.buffer, 0, writer.size, this.port, this.hostname);
   }
 

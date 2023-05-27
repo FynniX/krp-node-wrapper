@@ -197,7 +197,7 @@ export function toTyped(part: string[]): ReturnT {
         let status;
         i++;
 
-        if (part[1] === "PRACTISE" || part[1] === "QUALIFY" || part[1] === "WARMUP") {
+        if (part[1] === "TESTINGDAY" || part[1] === "PRACTISE" || part[1] === "QUALIFY" || part[1] === "WARMUP") {
           bestLap = parseInt(part[i]);
           i++;
 
@@ -214,7 +214,7 @@ export function toTyped(part: string[]): ReturnT {
         } else {
           raceTime = typeof part[i] === 'number' ? parseInt(part[i]) : undefined;
           i++;
-          status = <ClassificationEntryStatusT>typeof part[i] === 'string' ? part[i] : undefined;
+          status = <ClassificationEntryStatusT> (typeof part[i] === 'string' ? part[i] : undefined);
           i++;
 
           if (raceTime !== 0 && raceTime !== undefined) {

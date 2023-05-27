@@ -20,7 +20,37 @@ or
 
 ## API documentation
 
-# Shared Memory
+# UDP
+
+## Types
+
+Under src/types/
+
+```
+Update Data Types:
+EventT
+EntryT
+EntryRemoveT
+SessionT
+SessionStatusT
+WeatherT
+SessionEntryT
+DriverStatusT
+BestLapT
+LastLapT
+PenaltyT
+LapT
+SplitT
+SpeedT
+ClassificationT
+ChallengeDataT
+TrackDataT
+TrackSegmentT
+TrackPositionT
+ContactT
+```
+
+## Examples
 
 ```js
 const wrapper = new KRPNodeWrapper(Hostname, Port, Password, Logging)
@@ -33,8 +63,8 @@ const wrapper = new KRPNodeWrapper(Hostname, Port, Password, Logging)
 | "update"         | Sends all the received data. |
 
 ```js
-wrapper.on("update", result => {
-    console.log(result)
+wrapper.on("update", (type: string, data) => {
+    console.log(type, data)
 })
 ```
 
