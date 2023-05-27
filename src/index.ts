@@ -1,5 +1,4 @@
 import {createSocket, Socket} from "dgram";
-import Config from "../config";
 import BinaryWriter from "./classes/BinaryWriter";
 import BinaryReader from "./classes/BinaryReader";
 import {getParts} from "./functions/getParts";
@@ -186,7 +185,7 @@ class KRPNodeWrapper extends EventEmitter {
         const writer = new BinaryWriter('LE');
         writer.writeStringLine("ACK");
         writer.writeStringLine(szId);
-        this.client.send(writer.buffer, 0, writer.size, Config.Connection.port, Config.Connection.hostname);
+        this.client.send(writer.buffer, 0, writer.size, this.port, this.hostname);
 
         this.console(`Acknowledgement Id: ${szId}!`)
         break;
@@ -231,8 +230,8 @@ class KRPNodeWrapper extends EventEmitter {
 
     const writer = new BinaryWriter('LE');
     writer.writeStringLine("CONNECT");
-    writer.writeStringLine(Config.Connection.password);
-    this.client.send(writer.buffer, 0, writer.size, Config.Connection.port, Config.Connection.hostname);
+    writer.writeStringLine(this.password);
+    this.client.send(writer.buffer, 0, writer.size, this.port, this.hostname);
   }
 
   disconnect(): void {
@@ -252,7 +251,7 @@ class KRPNodeWrapper extends EventEmitter {
     writer.writeStringLine("START");
     writer.writeStringLine("1");
     writer.writeStringLine("1");
-    this.client.send(writer.buffer, 0, writer.size, Config.Connection.port, Config.Connection.hostname);
+    this.client.send(writer.buffer, 0, writer.size, this.port, this.hostname);
   }
 
   keepalive(): void {
@@ -261,10 +260,8 @@ class KRPNodeWrapper extends EventEmitter {
 
     const writer = new BinaryWriter('LE');
     writer.writeStringLine("KEEPALIVE");
-    this.client.send(writer.buffer, 0, writer.size, Config.Connection.port, Config.Connection.hostname);
+    this.client.send(writer.buffer, 0, writer.size, this.port, this.hostname);
   }
 }
-
-new KRPNodeWrapper(Config.Connection.hostname, Config.Connection.port, Config.Connection.password, true);
 
 export default KRPNodeWrapper;
