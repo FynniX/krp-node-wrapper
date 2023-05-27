@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Node.js Wrapper to communicate with Kart Racing Pro Server",
   "main": "src/index.ts",
-  "private": true,
   "scripts": {},
   "keywords": [],
   "author": "Fynn Haupt",

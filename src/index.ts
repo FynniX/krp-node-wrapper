@@ -89,6 +89,7 @@ class KRPNodeWrapper extends EventEmitter {
     switch (szString) {
       case "OK":
         this.connected = true;
+        this.emit('connected');
         const id = setInterval(this.checkAlive.bind(this), 5000);
         const id2 = setInterval(this.keepalive.bind(this), 15000);
         this.stop = () => {
@@ -239,6 +240,7 @@ class KRPNodeWrapper extends EventEmitter {
       return;
 
     this.connected = false;
+    this.emit('disconnected');
     this.stop();
   }
 
