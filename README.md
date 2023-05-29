@@ -14,9 +14,7 @@ This package was tested under [Node.js](https://nodejs.org/) 16.16.0 x64.
 
 [Kart Racing Pro](https://www.kartracing-pro.com/) release13b was used while testing.
 
-`npm install https://github.com/FynniX/krp-node-wrapper.git --save`
-or
-`npm install git@github.com:FynniX/krp-node-wrapper.git --save`
+`npm install krp-node-wrapper`
 
 ## API documentation
 
