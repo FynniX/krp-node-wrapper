@@ -94,7 +94,7 @@ class KRPNodeWrapper extends EventEmitter {
     for (const part of parts) {
       const data = toTyped(part);
 
-      if(!data) {
+      if (!data) {
         this.console("Unknown Event: " + part[0].toUpperCase());
         continue;
       }
@@ -118,8 +118,7 @@ class KRPNodeWrapper extends EventEmitter {
     const currentTime = process.hrtime.bigint();
     const diff = Number(currentTime - lastMessage) / Math.pow(10, 6);
 
-    if (diff < 20000
-    )
+    if (diff < 20000)
       return;
 
     this.disconnect();
@@ -140,6 +139,9 @@ class KRPNodeWrapper extends EventEmitter {
     if (!this.connected)
       return;
 
+    const writer = new BinaryWriter('LE');
+    writer.writeStringLine("DISCONNECT");
+    this.client.send(writer.buffer, 0, writer.size, this.port, this.hostname);
     this.connected = false;
     this.emit('disconnected');
     this.stop();
