@@ -1,5 +1,5 @@
 export type EntryT = {
-  number: number;
+  raceNumber: number;
   name: string;
   kart: EntryKartT;
   guid: string;
