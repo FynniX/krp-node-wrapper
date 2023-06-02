@@ -29,6 +29,7 @@ import {TrackDataT} from "../types/TrackDataT";
 import {TrackSegmentT, TrackSegmentTypeT} from "../types/TrackSegmentT";
 import {TrackPositionEntryT, TrackPositionT} from "../types/TrackPositionT";
 import {ContactT} from "../types/ContactT";
+import {isLapped} from "./isLapped";
 
 type ReturnT =
   EventT
@@ -206,21 +207,20 @@ export function toTyped(part: string[]): ReturnT {
             i++;
             totalLaps = parseInt(part[i])
             i++;
-            gap = typeof part[i] === 'string' ? part[i] : parseInt(part[i])
+            gap = part[i] === "--" ? part[i] : parseInt(part[i])
             i++;
             speed = parseInt(part[i])
             i++;
           }
         } else {
-          raceTime = typeof part[i] === 'number' ? parseInt(part[i]) : undefined;
-          i++;
-          status = <ClassificationEntryStatusT> (typeof part[i] === 'string' ? part[i] : undefined);
+          raceTime = part[i] === "DNS" || part[i] === "DSQ" ? undefined : parseInt(part[i]);
+          status = <ClassificationEntryStatusT> (part[i] === "DNS" || part[i] === "DSQ" ? part[i] : undefined);
           i++;
 
           if (raceTime !== 0 && raceTime !== undefined) {
             lapNumber = parseInt(part[i]);
             i++;
-            gap = typeof part[i] === 'string' ? part[i] : parseInt(part[i])
+            gap = isLapped(part[i]) || part[i] === "--" ? part[i] : parseInt(part[i])
             i++;
           }
         }
@@ -240,6 +240,8 @@ export function toTyped(part: string[]): ReturnT {
           kartStatus
         })
       }
+
+      console.log(classificationEntries)
 
       data = {
         session: part[1],
