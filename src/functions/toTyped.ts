@@ -241,8 +241,6 @@ export function toTyped(part: string[]): ReturnT {
         })
       }
 
-      console.log(classificationEntries)
-
       data = {
         session: part[1],
         status: part[2],

@@ -1,6 +1,6 @@
 {
   "name": "krp-node-wrapper",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Node.js Wrapper to communicate with Kart Racing Pro Server",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
