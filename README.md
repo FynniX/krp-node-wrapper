@@ -18,13 +18,12 @@ This package was tested under [Node.js](https://nodejs.org/) 16.16.0 x64.
 
 ## API documentation
 
-# UDP
-
 ## Types
 
 Under src/types/
 
 ```
+ServerWrapper:
 Update Data Types:
 EventT
 EntryT
@@ -46,7 +45,17 @@ TrackDataT
 TrackSegmentT
 TrackPositionT
 ContactT
+
+ClientWrapper:
+Update Data Types:
+KartDataT
+KartEventT
+KartLapT
+KartSessionT
+KartSplitT
 ```
+
+# ServerWrapper
 
 ## Examples
 
@@ -72,6 +81,37 @@ wrapper.on("update", (type: string, data) => {
 
 ```js
 wrapper.connected
+```
+
+# ClientWrapper
+
+## Configuration
+
+proxy_udp.ini
+
+```
+[params]
+enable = 1
+port = 30000
+ip = 127.0.0.1:30001
+delay = 1
+info = 1
+```
+
+## Examples
+
+```js
+const wrapper = new KRPNodeWrapper(Port, Logging)
+```
+
+| Event            | Description                  |
+|------------------|------------------------------|
+| "update"         | Sends all the received data. |
+
+```js
+wrapper.on("update", (type: string, data) => {
+    console.log(type, data)
+})
 ```
 
 ## License

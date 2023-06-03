@@ -48,7 +48,7 @@ class BinaryReader {
     return value;
   }
 
-  readUInt64(): BigInt | undefined {
+  readUInt64(): bigint | undefined {
     if(this.size < 8)
       return;
 
@@ -92,7 +92,7 @@ class BinaryReader {
     return value;
   }
 
-  readInt64(): BigInt | undefined {
+  readInt64(): bigint | undefined {
     if(this.size < 8)
       return;
 
@@ -132,6 +132,16 @@ class BinaryReader {
     this.size = this.buffer.length;
 
     return tempBuffer.toString(this.encoding);
+  }
+
+  readStringNullTerminated(): string {
+    const endIndex = this.buffer.indexOf("\0")
+    const tempBuffer = Buffer.alloc(endIndex + 1);
+    this.buffer.copy(tempBuffer, 0, 0, endIndex + 1);
+    this.buffer = this.buffer.subarray(endIndex + 1, this.size);
+    this.size = this.buffer.length;
+
+    return tempBuffer.subarray(0, endIndex).toString(this.encoding);
   }
 
   readStringLine(): string {
